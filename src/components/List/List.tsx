@@ -4,7 +4,7 @@ import { SidebarContext } from '../../context/SidebarContext';
 import ListBuilder from '../../containers/ListBuilder';
 
 const StyledList = styled.div`
-  background: lightgrey;
+  background: #fff;
   width: 250px;
   height: 700px;
   position: fixed;
