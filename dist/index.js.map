@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sources":["../src/index.tsx"],"sourcesContent":["import * as React from \"react\";\n\nconst App = () => {\n  return <h1>Hello</h1>;\n};\n\nexport default App;\n"],"names":["React.createElement"],"mappings":";;;;IAEM,GAAG,GAAG;IACV,OAAOA,wCAAc,CAAC;AACxB;;;;"}

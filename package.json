@@ -53,5 +53,10 @@
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
+  },
+  "dependencies": {
+    "@n8tb1t/use-scroll-position": "^1.0.43",
+    "lodash": "^4.17.15",
+    "unstated-next": "^1.1.0"
   }
 }
