@@ -1,34 +1,55 @@
 import * as React from 'react';
 import { useScrollPosition } from '@n8tb1t/use-scroll-position';
-import { SidebarContext } from '../context/SidebarContext';
+import { SidelistContext } from '../context/SidelistContext';
 
 interface SectionProps {
-  name: string;
+  text: string;
+  index: number;
   initial?: boolean;
   nestedLevel?: number;
+  id: string;
 }
 
 const Section: React.FC<SectionProps> = ({
-  name,
+  text,
   initial = false,
   nestedLevel = 0,
+  id,
   children,
 }) => {
   let scrollRef = React.useRef(null) as React.RefObject<HTMLDivElement> | null;
   const [visible, setVisible] = React.useState<boolean>(false);
-  const { addToSections, setActiveSection } = SidebarContext.useContainer();
+  const { addToSections, setActiveSection } = SidelistContext.useContainer();
 
   React.useEffect(() => {
     if (!scrollRef) return;
 
-    if (initial) setActiveSection({ ref: scrollRef, nestedLevel, name });
-    addToSections({ ref: scrollRef, nestedLevel, name });
+    if (initial)
+      setActiveSection({
+        id,
+        ref: scrollRef,
+        nestedLevel,
+        text,
+        children: [],
+      });
+
+    addToSections({
+      id,
+      ref: scrollRef,
+      nestedLevel,
+      text,
+      children: [],
+    });
   }, []);
 
   React.useEffect(() => {
     visible &&
       scrollRef &&
-      setActiveSection({ ref: scrollRef, name } as Section);
+      setActiveSection({
+        ref: scrollRef,
+        text,
+        id,
+      } as Section);
   }, [visible]);
 
   function isActive(top: number, bottom: number): boolean {
@@ -62,7 +83,11 @@ const Section: React.FC<SectionProps> = ({
     );
   }
 
-  return <div ref={scrollRef}>{children}</div>;
+  return (
+    <div ref={scrollRef} id={id}>
+      {children}
+    </div>
+  );
 };
 
 export default Section;

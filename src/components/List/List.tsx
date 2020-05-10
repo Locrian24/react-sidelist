@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { SidebarContext } from '../../context/SidebarContext';
+import { SidelistContext } from '../../context/SidelistContext';
 import ListBuilder from '../../containers/ListBuilder';
 
 const StyledList = styled.div`
@@ -11,7 +11,7 @@ const StyledList = styled.div`
 `;
 
 const List: React.FC = () => {
-  const { allSections } = SidebarContext.useContainer();
+  const { allSections } = SidelistContext.useContainer();
 
   return (
     <StyledList>

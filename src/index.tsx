@@ -14,16 +14,43 @@ const GlobalStyles = styled.div`
   }
 `;
 
-import { SidebarProvider } from './context/SidebarContext';
+import { SidelistProvider } from './context/SidelistContext';
 
 const index: React.FC = () => {
   return (
     <GlobalStyles>
-      <SidebarProvider>
+      <SidelistProvider>
         <List />
         <div style={{ marginLeft: '250px' }}>
-          {'Hello my name is Bruce Wayne'.split(' ').map((word, index) => (
-            <Section name={word} initial={index === 0} key={index}>
+          {'Hello my name'.split(' ').map((word, index) => (
+            <Section
+              text={word}
+              initial={index === 0}
+              nestedLevel={index === 0 ? 0 : Math.round(Math.random())}
+              key={index}
+              id={word.toLowerCase().split(' ').join('_')}
+              index={index}
+            >
+              <div style={{ height: '250px' }}>
+                <h1>{word}</h1>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
+                  aperiam impedit perspiciatis nemo illum magni rerum tempore
+                  sequi ipsum. Provident eos sapiente quaerat, aliquid
+                  exercitationem repellendus necessitatibus explicabo culpa
+                  corporis?
+                </p>
+              </div>
+            </Section>
+          ))}
+          {'is Bruce Wayne,yes it, is'.split(',').map((word, index) => (
+            <Section
+              text={word}
+              nestedLevel={Math.round(Math.random())}
+              key={index}
+              id={word.toLowerCase().split(' ').join('_')}
+              index={index}
+            >
               <div style={{ height: '250px' }}>
                 <h1>{word}</h1>
                 <p>
@@ -37,7 +64,7 @@ const index: React.FC = () => {
             </Section>
           ))}
         </div>
-      </SidebarProvider>
+      </SidelistProvider>
     </GlobalStyles>
   );
 };
