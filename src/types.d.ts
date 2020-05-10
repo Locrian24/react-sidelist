@@ -1,12 +1,28 @@
 type Section = {
   id: string;
   text: string;
-  nestedLevel: number;
-  ref: React.RefObject<HTMLDivElement>;
+  ref: React.MutableRefObject<HTMLElement>;
   children: Array<string>;
   parent?: string | null;
+  depth: number;
+};
+
+type SectionFrag = {
+  id: string;
+  text: string;
+  ref: React.MutableRefObject<HTMLElement>;
+  children: Array<string>;
 };
 
 interface Parents {
+  [id: string]: Section;
+}
+
+interface ChildFrag {
+  id: string;
+  parent: string;
+}
+
+interface SectionObj {
   [id: string]: Section;
 }

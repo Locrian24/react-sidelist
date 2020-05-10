@@ -26,10 +26,8 @@ const index: React.FC = () => {
             <Section
               text={word}
               initial={index === 0}
-              nestedLevel={index === 0 ? 0 : Math.round(Math.random())}
               key={index}
               id={word.toLowerCase().split(' ').join('_')}
-              index={index}
             >
               <div style={{ height: '250px' }}>
                 <h1>{word}</h1>
@@ -43,26 +41,36 @@ const index: React.FC = () => {
               </div>
             </Section>
           ))}
-          {'is Bruce Wayne,yes it, is'.split(',').map((word, index) => (
-            <Section
-              text={word}
-              nestedLevel={Math.round(Math.random())}
-              key={index}
-              id={word.toLowerCase().split(' ').join('_')}
-              index={index}
-            >
-              <div style={{ height: '250px' }}>
-                <h1>{word}</h1>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
-                  aperiam impedit perspiciatis nemo illum magni rerum tempore
-                  sequi ipsum. Provident eos sapiente quaerat, aliquid
-                  exercitationem repellendus necessitatibus explicabo culpa
-                  corporis?
-                </p>
-              </div>
-            </Section>
-          ))}
+          <Section text="Wrapper" nestedLevel={0} id="wrapper" wrapper={true}>
+            <div style={{ height: '200px' }}>
+              <h1>WRAPPER</h1>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
+                aperiam impedit perspiciatis nemo illum magni rerum tempore
+                sequi ipsum. Provident eos sapiente quaerat, aliquid
+                exercitationem repellendus necessitatibus explicabo culpa
+                corporis?
+              </p>
+            </div>
+            {'is Bruce Wayne,yes it, is'.split(',').map((word, index) => (
+              <Section
+                text={word}
+                key={index}
+                id={word.toLowerCase().split(' ').join('_')}
+              >
+                <div style={{ height: '250px' }}>
+                  <h1>{word}</h1>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
+                    aperiam impedit perspiciatis nemo illum magni rerum tempore
+                    sequi ipsum. Provident eos sapiente quaerat, aliquid
+                    exercitationem repellendus necessitatibus explicabo culpa
+                    corporis?
+                  </p>
+                </div>
+              </Section>
+            ))}
+          </Section>
         </div>
       </SidelistProvider>
     </GlobalStyles>

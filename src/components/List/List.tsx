@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { SidelistContext } from '../../context/SidelistContext';
 import ListBuilder from '../../containers/ListBuilder';
 
 const StyledList = styled.div`
@@ -11,11 +10,9 @@ const StyledList = styled.div`
 `;
 
 const List: React.FC = () => {
-  const { allSections } = SidelistContext.useContainer();
-
   return (
     <StyledList>
-      {allSections && <ListBuilder sections={allSections} />}
+      <ListBuilder />
     </StyledList>
   );
 };
