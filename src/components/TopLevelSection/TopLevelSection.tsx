@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { SidelistContext } from '../../context/SidelistContext';
-import StripeSection from '../custom/StripeSection';
 import { ListElement } from '../ListElement';
 
 interface TopLevelSectionProps {
@@ -8,17 +7,20 @@ interface TopLevelSectionProps {
 }
 
 const TopLevelSection: React.FC<TopLevelSectionProps> = ({ section }) => {
-  const { activeParent, allSections } = SidelistContext.useContainer();
+  const {
+    activeParent,
+    allSections,
+    showChildren,
+  } = SidelistContext.useContainer();
 
   return (
     <>
-      <ListElement section={section} ElementComponent={StripeSection} />
-      {activeParent === section.id &&
+      <ListElement section={section} />
+      {(activeParent === section.id || showChildren) &&
         section.children.map((child: string, key: number) => {
           return (
             <ListElement
               section={allSections[child]}
-              ElementComponent={StripeSection}
               isChild={true}
               key={key}
             />

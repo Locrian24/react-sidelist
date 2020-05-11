@@ -26,3 +26,9 @@ interface ChildFrag {
 interface SectionObj {
   [id: string]: Section;
 }
+
+interface SidelistProviderProps {
+  ListComponent?: any;
+  showChildren?: boolean;
+  initialId: string;
+}

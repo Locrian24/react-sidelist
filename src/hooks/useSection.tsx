@@ -11,12 +11,15 @@ type SectionFrag = {
 
 export function useSection(
   ref: React.MutableRefObject<HTMLElement>,
-  section: SectionFrag,
-  initial: boolean
+  section: SectionFrag
 ) {
   const [visible, setVisible] = React.useState<boolean>(false);
 
-  const { addToSections, setActiveSection } = SidelistContext.useContainer();
+  const {
+    addToSections,
+    setActiveSection,
+    initialId,
+  } = SidelistContext.useContainer();
   const { id, text } = section;
 
   React.useEffect(() => {
@@ -27,7 +30,7 @@ export function useSection(
         .filter((child: HTMLElement) => child.dataset.section)
         .map((section: HTMLElement) => section.id) || [];
 
-    if (initial) setActiveSection(id);
+    if (initialId) setActiveSection(id);
 
     addToSections({
       id,
@@ -35,7 +38,7 @@ export function useSection(
       text,
       children,
     });
-  }, [ref, id, text, initial]);
+  }, [ref, id, text, initialId]);
 
   React.useEffect(() => {
     visible && ref && setActiveSection(id);

@@ -11,13 +11,12 @@ interface SectionProps {
 
 const Section: React.FC<SectionProps> = ({
   text,
-  initial = false,
   nestedLevel = 0,
   id,
   children,
 }) => {
   let scrollRef = React.useRef() as React.MutableRefObject<HTMLElement>;
-  useSection(scrollRef, { id, text, nestedLevel }, initial);
+  useSection(scrollRef, { id, text, nestedLevel });
 
   return (
     <div

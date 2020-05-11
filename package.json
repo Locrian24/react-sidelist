@@ -1,6 +1,6 @@
 {
-  "name": "react-list-sidebar",
-  "version": "1.0.0",
+  "name": "react-sidelist",
+  "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "files": [
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Locrian24/react-list-sidebar.git"
+    "url": "git+https://github.com/Locrian24/react-sidelist.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Locrian24/react-list-sidebar/issues"
+    "url": "https://github.com/Locrian24/react-sidelist/issues"
   },
-  "homepage": "https://github.com/Locrian24/react-list-sidebar#readme",
+  "homepage": "https://github.com/Locrian24/react-sidelist#readme",
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@storybook/react": "^5.3.18",

@@ -4,7 +4,6 @@ import { SidelistContext } from '../context/SidelistContext';
 
 interface ListElementProps {
   section: Section;
-  ElementComponent: any;
   isChild?: boolean;
 }
 
@@ -18,13 +17,13 @@ const Link = styled.a`
 
 export const ListElement: React.FC<ListElementProps> = ({
   section,
-  ElementComponent,
   isChild = false,
 }) => {
   const {
     setActiveSection,
     activeSection,
     activeParent,
+    ListComponent,
   } = SidelistContext.useContainer();
 
   const active = activeSection
@@ -33,13 +32,13 @@ export const ListElement: React.FC<ListElementProps> = ({
 
   return (
     <Link href={`#${section.id}`} onClick={() => setActiveSection(section.id)}>
-      <ElementComponent
+      <ListComponent
         data-section
         active={active!}
         nestedPadding={isChild ? 32 : 16}
       >
         {section.text}
-      </ElementComponent>
+      </ListComponent>
     </Link>
   );
 };

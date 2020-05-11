@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { createContainer } from 'unstated-next';
 
-function useSections(initialSection = null) {
-  const [activeSection, _setActiveSection] = React.useState<Section | null>(
-    initialSection
-  );
+function useSections(initialState: SidelistProviderProps) {
+  const [activeSection, _setActiveSection] = React.useState<Section | null>();
   const [activeParent, setActiveParent] = React.useState<string | null>(null);
   const [allSections, setAllSections] = React.useState<SectionObj>({});
   const [children, setChildren] = React.useState<Array<string>>([]);
+
+  const { ListComponent, showChildren, initialId } = initialState;
 
   // Adds section to full list of sections
   const addToSections = (section: SectionFrag) => {
@@ -43,11 +43,27 @@ function useSections(initialSection = null) {
     setActiveSection,
     addToSections,
     children,
+
+    //props
+    ListComponent: (() => ListComponent || null)(),
+    showChildren: (() => showChildren || false)(),
+    initialId,
   };
 }
 
 export const SidelistContext = createContainer(useSections);
 
-export const SidelistProvider: React.FC = ({ children }) => (
-  <SidelistContext.Provider>{children}</SidelistContext.Provider>
+export const SidelistProvider: React.FC<SidelistProviderProps> = ({
+  children,
+  ListComponent,
+  showChildren,
+}) => (
+  <SidelistContext.Provider
+    initialState={{
+      ListComponent,
+      showChildren,
+    }}
+  >
+    {children}
+  </SidelistContext.Provider>
 );

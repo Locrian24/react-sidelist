@@ -15,11 +15,16 @@ const GlobalStyles = styled.div`
 `;
 
 import { SidelistProvider } from './context/SidelistContext';
+import StripeSection from './components/custom/StripeSection';
 
 const index: React.FC = () => {
   return (
     <GlobalStyles>
-      <SidelistProvider>
+      <SidelistProvider
+        ListComponent={StripeSection}
+        showChildren={false}
+        initialId={'hello'}
+      >
         <List />
         <div style={{ marginLeft: '250px' }}>
           {'Hello my name'.split(' ').map((word, index) => (
