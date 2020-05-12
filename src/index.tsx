@@ -2,6 +2,8 @@ import * as React from 'react';
 import List from './components/List/List';
 import Section from './containers/Section';
 import styled from 'styled-components';
+import { SidelistProvider } from './context/SidelistContext';
+import StripeSection from './components/custom/StripeSection';
 
 const GlobalStyles = styled.div`
   display: flex;
@@ -14,8 +16,6 @@ const GlobalStyles = styled.div`
   }
 `;
 
-import { SidelistProvider } from './context/SidelistContext';
-import StripeSection from './components/custom/StripeSection';
 
 const index: React.FC = () => {
   return (
@@ -28,12 +28,7 @@ const index: React.FC = () => {
         <List />
         <div style={{ marginLeft: '250px' }}>
           {'Hello my name'.split(' ').map((word, index) => (
-            <Section
-              text={word}
-              initial={index === 0}
-              key={index}
-              id={word.toLowerCase().split(' ').join('_')}
-            >
+            <Section text={word} initial={index === 0} key={index}>
               <div style={{ height: '250px' }}>
                 <h1>{word}</h1>
                 <p>
@@ -46,7 +41,7 @@ const index: React.FC = () => {
               </div>
             </Section>
           ))}
-          <Section text="Wrapper" nestedLevel={0} id="wrapper" wrapper={true}>
+          <Section text="Wrapper" wrapper={true}>
             <div style={{ height: '200px' }}>
               <h1>WRAPPER</h1>
               <p>
@@ -58,11 +53,7 @@ const index: React.FC = () => {
               </p>
             </div>
             {'is Bruce Wayne,yes it, is'.split(',').map((word, index) => (
-              <Section
-                text={word}
-                key={index}
-                id={word.toLowerCase().split(' ').join('_')}
-              >
+              <Section text={word} key={index}>
                 <div style={{ height: '250px' }}>
                   <h1>{word}</h1>
                   <p>

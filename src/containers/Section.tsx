@@ -4,19 +4,23 @@ import { useSection } from '../hooks/useSection';
 interface SectionProps {
   text: string;
   initial?: boolean;
-  nestedLevel?: number;
-  id: string;
+  id?: string;
   wrapper?: boolean;
 }
 
 const Section: React.FC<SectionProps> = ({
   text,
-  nestedLevel = 0,
-  id,
+  id = undefined,
   children,
 }) => {
   let scrollRef = React.useRef() as React.MutableRefObject<HTMLElement>;
-  useSection(scrollRef, { id, text, nestedLevel });
+
+  const sectionId = React.useMemo(
+    () => id || text.toLowerCase().split(' ').join('_'),
+    [id, text]
+  );
+
+  useSection(scrollRef, { sectionId, text });
 
   return (
     <div

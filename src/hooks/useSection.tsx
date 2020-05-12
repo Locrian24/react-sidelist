@@ -4,8 +4,7 @@ import { useScrollPosition } from '@n8tb1t/use-scroll-position';
 
 type SectionFrag = {
   text: string;
-  nestedLevel: number;
-  id: string;
+  sectionId: string;
   wrapper?: boolean;
 };
 
@@ -20,7 +19,8 @@ export function useSection(
     setActiveSection,
     initialId,
   } = SidelistContext.useContainer();
-  const { id, text } = section;
+  const { sectionId, text } = section;
+  const id = sectionId;
 
   React.useEffect(() => {
     if (!ref) return;
