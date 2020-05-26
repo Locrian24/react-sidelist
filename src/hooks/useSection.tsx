@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { SidelistContext } from '../context/SidelistContext';
 import { useScrollPosition } from '@n8tb1t/use-scroll-position';
+import { SidelistContext } from '../context/SidelistContext';
 
 type SectionFrag = {
   text: string;
@@ -8,10 +8,10 @@ type SectionFrag = {
   wrapper?: boolean;
 };
 
-export function useSection(
+function useSection(
   ref: React.MutableRefObject<HTMLElement>,
   section: SectionFrag
-) {
+): void {
   const [visible, setVisible] = React.useState<boolean>(false);
 
   const {
@@ -75,3 +75,5 @@ export function useSection(
     );
   }
 }
+
+export default useSection;
