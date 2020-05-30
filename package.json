@@ -1,5 +1,5 @@
 {
-  "name": "react-sidelist",
+  "name": "react-table-of-contents",
   "version": "0.0.1",
   "description": "",
   "files": [
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Locrian24/react-sidelist.git"
+    "url": "git+https://github.com/Locrian24/react-table-of-contents.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Locrian24/react-sidelist/issues"
+    "url": "https://github.com/Locrian24/react-table-of-contents/issues"
   },
-  "homepage": "https://github.com/Locrian24/react-sidelist#readme",
+  "homepage": "https://github.com/Locrian24/react-table-of-contents#readme",
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@storybook/react": "^5.3.18",
