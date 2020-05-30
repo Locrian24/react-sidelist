@@ -1,11 +1,11 @@
+type Target = React.RefObject<HTMLElement>;
+
 type Section = {
+  element: HTMLElement | null;
   id: string;
-  text: string;
-  ref: React.MutableRefObject<HTMLElement>;
-  children: Array<string>;
-  parent?: string | null;
-  depth: number;
 };
+
+type SectionList = Array<Section>;
 
 type SectionFrag = {
   id: string;

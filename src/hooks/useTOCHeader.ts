@@ -1,31 +1,23 @@
-import { RefObject, useEffect, useState, useRef } from 'react';
-
-type Target = RefObject<Element>;
+import { useEffect, useRef } from 'react';
+import { Target } from '../types/contextTypes';
+import TOCContext from '../context/TOCContext';
 
 // ** A stripped/typed version of https://github.com/n8tb1t/use-scroll-position/blob/master/src/useScrollPosition.jsx
-function getYScrollPosition({
-  element = false,
-}: {
-  element: Target | false;
-}): number {
-  if (!element) return 0;
 
-  const target = element ? element.current : document.body;
-  const position = target?.getBoundingClientRect() || { top: 0 };
-
-  return position.top;
-}
-
-interface ScrollRange {
-  min: number;
-  max: number;
-}
-
-function useTOCHeader(element: Target, range: ScrollRange): void {
-  const [active, setActive] = useState<boolean>(false);
+/**
+ * Adds Element to TOC List and manages viewport intersection events
+ * @param element Element to include in TOC
+ * @param id Unique identifier for the element, also used for in-page navigation
+ */
+function useTOCHeader(element: Target, id: string): void {
+  const { determineActiveSection, addSection } = TOCContext.useContainer();
 
   const observer = useRef<IntersectionObserver>();
   const intersected = useRef<boolean>(false);
+
+  const callback = () => {
+    determineActiveSection(element, id);
+  };
 
   const startObserver = () => {
     if (element?.current && observer?.current)
@@ -40,35 +32,6 @@ function useTOCHeader(element: Target, range: ScrollRange): void {
     }
   };
 
-  const isActive = (topPosition: number): boolean => {
-    const { min, max } = range;
-    const bottomPosition = topPosition + (element.current?.scrollHeight || 0);
-
-    const topStatus =
-      topPosition < max ? (topPosition > min ? 'in' : 'above') : 'below';
-    const bottomStatus =
-      bottomPosition < max ? (bottomPosition > min ? 'in' : 'above') : 'below';
-
-    // Section is active if one of the following is true:
-    // Top "in" - Bottom ">"
-    // Top ">" - Bottom "in"
-    // Top "<" - Bottom ">"
-
-    const inRange = !(
-      (topStatus === 'above' && bottomStatus === 'above') ||
-      (topStatus === 'below' && bottomStatus === 'below')
-    );
-
-    return inRange;
-  };
-
-  const handleScroll = () => {
-    const position = getYScrollPosition({ element });
-    const newActive = isActive(position);
-
-    setActive(newActive);
-  };
-
   const handleIntersection = (entries: Array<IntersectionObserverEntry>) => {
     const entry = entries[0] || {};
     const { isIntersecting, intersectionRatio } = entry;
@@ -79,13 +42,13 @@ function useTOCHeader(element: Target, range: ScrollRange): void {
 
     if (!intersected.current && isInViewport) {
       intersected.current = true;
-      window.addEventListener('scroll', handleScroll);
+      window.addEventListener('scroll', callback);
       return;
     }
 
     if (intersected.current && !isInViewport) {
       intersected.current = false;
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', callback);
     }
   };
 
@@ -103,10 +66,17 @@ function useTOCHeader(element: Target, range: ScrollRange): void {
     startObserver();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      console.log('unmounting');
+
+      window.removeEventListener('scroll', callback);
       stopObserver();
     };
-  }, [element.current]);
+  }, []);
+
+  useEffect(() => {
+    const { current } = element;
+    addSection({ element: current, id });
+  }, []);
 }
 
 export default useTOCHeader;
