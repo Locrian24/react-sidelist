@@ -1,16 +1,14 @@
 import { useEffect, useRef } from 'react';
-import { Target } from '../types/contextTypes';
 import TOCContext from '../context/TOCContext';
-
-// ** A stripped/typed version of https://github.com/n8tb1t/use-scroll-position/blob/master/src/useScrollPosition.jsx
 
 /**
  * Adds Element to TOC List and manages viewport intersection events
  * @param element Element to include in TOC
  * @param id Unique identifier for the element, also used for in-page navigation
  */
-function useTOCHeader(element: Target, id: string): void {
+function useTOCHeader(sectionObj: Section): void {
   const { determineActiveSection, addSection } = TOCContext.useContainer();
+  const { element, id, text, parent } = sectionObj;
 
   const observer = useRef<IntersectionObserver>();
   const intersected = useRef<boolean>(false);
@@ -40,15 +38,19 @@ function useTOCHeader(element: Target, id: string): void {
         ? isIntersecting
         : intersectionRatio > 0;
 
+    // enterring viewport
     if (!intersected.current && isInViewport) {
       intersected.current = true;
       window.addEventListener('scroll', callback);
       return;
     }
 
+    // leaving viewport
     if (intersected.current && !isInViewport) {
       intersected.current = false;
       window.removeEventListener('scroll', callback);
+
+      // ?: Remove as activeSection?
     }
   };
 
@@ -59,23 +61,22 @@ function useTOCHeader(element: Target, id: string): void {
       });
   };
 
-  /** EFFECTs */
+  /** EFFECTS */
 
   useEffect(() => {
     initObserver();
     startObserver();
 
     return () => {
-      console.log('unmounting');
-
       window.removeEventListener('scroll', callback);
       stopObserver();
     };
   }, []);
 
   useEffect(() => {
-    const { current } = element;
-    addSection({ element: current, id });
+    if (!element) return;
+
+    addSection({ element, id, text, parent });
   }, []);
 }
 

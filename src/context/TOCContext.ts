@@ -28,19 +28,15 @@ function useTOC(initialState = null) {
    */
   function isActive(element: Target): boolean {
     // TODO: Change to user defined value
-    const { min, max } = { min: 0, max: 120 };
+    const { min, max } = { min: 0, max: 80 };
 
     const topPos = getYScrollPosition(element);
-    const bottomPosition = topPos + (element.current?.scrollHeight || 0);
+    const bottomPosition = topPos + 150;
+    // const bottomPosition = topPos + (element.current?.scrollHeight || 0);
 
     const topStatus = topPos < max ? (topPos > min ? 'in' : 'above') : 'below';
     const bottomStatus =
       bottomPosition < max ? (bottomPosition > min ? 'in' : 'above') : 'below';
-
-    // Section is active if one of the following is true:
-    // Top "in" - Bottom ">"
-    // Top ">" - Bottom "in"
-    // Top "<" - Bottom ">"
 
     // TODO: What if fast scroll goes to middle of section and misses the top being in the range
     const inRange = !(
@@ -69,11 +65,14 @@ function useTOC(initialState = null) {
    * Adds the section to the state array
    * @param element Element ref to be added
    */
-  const addSection = ({ element, id }: Section) => {
+  const addSection = ({ element, id, text, parent }: Section) => {
     if (!element) return;
 
     // TODO Don't support dynamically added sections in thier correct position
-    setSectionList((prev: SectionList) => [...prev, { element, id }]);
+    setSectionList((prev: SectionList) => [
+      ...prev,
+      { element, id, text, parent },
+    ]);
   };
 
   return {

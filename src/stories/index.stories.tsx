@@ -12,21 +12,21 @@ export const withOnlyHeaders = () => (
         <TOC />
       </div>
       <div style={{ marginLeft: '70px' }}>
-        <div style={{ height: '500px' }}>
-          <TOCHeader id="first">
+        <TOCHeader id="first" text="First">
+          <div style={{ height: '500px' }}>
             <h1 style={{ background: 'red' }}>FIRST</h1>
-          </TOCHeader>
-        </div>
-        <div style={{ height: '800px' }}>
-          <TOCHeader id="second">
+          </div>
+        </TOCHeader>
+        <TOCHeader id="second" text="Second">
+          <div style={{ height: '800px' }}>
             <h1 style={{ background: 'red' }}>SECOND</h1>
-          </TOCHeader>
-        </div>
-        <div style={{ height: '800px' }}>
-          <TOCHeader id="last">
+          </div>
+        </TOCHeader>
+        <TOCHeader id="last" text="Last">
+          <div style={{ height: '800px' }}>
             <h1 style={{ background: 'red' }}>LAST</h1>
-          </TOCHeader>
-        </div>
+          </div>
+        </TOCHeader>
       </div>
     </div>
   </TOCContext.Provider>
