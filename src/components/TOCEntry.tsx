@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useRef } from 'react';
-import useTOCHeader from '../hooks/useTOCHeader';
+import useTOCEntry from '../hooks/useTOCEntry';
 
-interface TOCHeaderProps {
+interface TOCEntryProps {
   id: string;
   text: string;
   parent?: string;
@@ -13,18 +13,17 @@ interface TOCHeaderProps {
  * @param text The text to display on the TOC list
  * @param parent (Optional) The unique id of the parent TOCSection. Treats this section as a child if set
  */
-const TOCHeader: React.FC<PropsWithChildren<TOCHeaderProps>> = ({
+const TOCEntry: React.FC<PropsWithChildren<TOCEntryProps>> = ({
   id,
   text,
-  parent = null,
   children,
 }) => {
   const element = useRef<HTMLDivElement>(null);
-  const section = { id, text, parent, element };
+  const section = { id, text, element };
 
-  useTOCHeader(section);
+  useTOCEntry(section);
 
   return <div ref={element}>{children}</div>;
 };
 
-export default TOCHeader;
+export default TOCEntry;

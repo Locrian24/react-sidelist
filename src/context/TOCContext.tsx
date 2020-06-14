@@ -1,12 +1,15 @@
+import React, { useState, PropsWithChildren, useCallback } from 'react';
 import { createContainer } from 'unstated-next';
-import { useState } from 'react';
 import { Target } from '../types/contextTypes';
+import TOCChildrenWrapper from '../components/TOCChildren';
 
 function useTOC(initialState = null) {
-  const [sectionList, setSectionList] = useState<SectionList>([]);
+  const [sectionList, setSectionList] = useState<SectionList>({});
+  const [parentList, setParentList] = useState<Array<string>>([]);
   const [activeSection, setActiveSection] = useState<string | null>(
     initialState
   );
+  const [activeParents, setActiveParents] = useState<Array<string>>([]);
 
   /**
    * Gets the Y-axis co-ord of the top of the element given
@@ -69,18 +72,61 @@ function useTOC(initialState = null) {
     if (!element) return;
 
     // TODO Don't support dynamically added sections in thier correct position
-    setSectionList((prev: SectionList) => [
+    // ? List order comes from order of adding to state list rather than actual order
+    setSectionList((prev: SectionList) => ({
       ...prev,
-      { element, id, text, parent },
-    ]);
+      [id]: { element, id, text, parent },
+    }));
   };
+
+  /**
+   * Returns the nested level of a parent/activeSection
+   */
+  const getDepth = () => {
+    return activeParents.length - 2;
+  };
+
+  /**
+   * Aggregate all ancestors of a node
+   * @param primaryParent the id of the deepest parent
+   */
+  const aggregateParents = useCallback(
+    (
+      primaryParent: string,
+      currentParents = [] as Array<string>
+    ): Array<string> => {
+      if (!sectionList[primaryParent]?.parent) return [primaryParent];
+
+      const { parent } = sectionList[primaryParent];
+
+      return [
+        primaryParent,
+        ...aggregateParents(parent, [...currentParents, primaryParent]),
+      ];
+    },
+    [sectionList]
+  );
 
   return {
     determineActiveSection,
     addSection,
     sectionList,
     activeSection,
+    activeParents,
+    setActiveParents,
+    aggregateParents,
   };
 }
 
-export default createContainer(useTOC);
+export const TOCContainer = createContainer(useTOC);
+
+export const TOCProvider = ({
+  initialSection,
+  children,
+}: PropsWithChildren<{ initialSection: string }>) => {
+  return (
+    <TOCContainer.Provider initialState={initialSection}>
+      <TOCChildrenWrapper parent="root">{children}</TOCChildrenWrapper>
+    </TOCContainer.Provider>
+  );
+};

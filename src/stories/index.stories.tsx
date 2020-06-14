@@ -1,33 +1,48 @@
 import React from 'react';
-import TOCHeader from '../components/TOCHeader';
-import TOCContext from '../context/TOCContext';
+import TOCEntry from '../components/TOCEntry';
+import { TOCProvider } from '../context/TOCContext';
 import TOC from '../components/TOC';
+import TOCChildren from '../components/TOCChildren';
 
 export default { title: 'TOC' };
 
 export const withOnlyHeaders = () => (
-  <TOCContext.Provider initialState="first">
+  <TOCProvider initialSection="first">
     <div style={{ display: 'flex' }}>
       <div style={{ position: 'fixed' }}>
         <TOC />
       </div>
-      <div style={{ marginLeft: '70px' }}>
-        <TOCHeader id="first" text="First">
+      <div style={{ marginLeft: '200px' }}>
+        <TOCEntry id="first" text="First">
           <div style={{ height: '500px' }}>
             <h1 style={{ background: 'red' }}>FIRST</h1>
           </div>
-        </TOCHeader>
-        <TOCHeader id="second" text="Second">
-          <div style={{ height: '800px' }}>
-            <h1 style={{ background: 'red' }}>SECOND</h1>
-          </div>
-        </TOCHeader>
-        <TOCHeader id="last" text="Last">
+        </TOCEntry>
+        <TOCChildren parent="first">
+          <TOCEntry id="first-child" text="First - Child">
+            <div style={{ height: '500px' }}>
+              <h1 style={{ background: 'red' }}>FIRST - CHILD</h1>
+            </div>
+          </TOCEntry>
+          <TOCChildren parent="first-child">
+            <TOCEntry id="first-child-2" text="First - Child - Child">
+              <div style={{ height: '500px' }}>
+                <h1 style={{ background: 'red' }}>FIRST - CHILD - CHILD</h1>
+              </div>
+            </TOCEntry>
+          </TOCChildren>
+          <TOCEntry id="second" text="Second">
+            <div style={{ height: '800px' }}>
+              <h1 style={{ background: 'red' }}>SECOND</h1>
+            </div>
+          </TOCEntry>
+        </TOCChildren>
+        <TOCEntry id="last" text="Last">
           <div style={{ height: '800px' }}>
             <h1 style={{ background: 'red' }}>LAST</h1>
           </div>
-        </TOCHeader>
+        </TOCEntry>
       </div>
     </div>
-  </TOCContext.Provider>
+  </TOCProvider>
 );

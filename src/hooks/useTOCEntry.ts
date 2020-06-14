@@ -1,14 +1,24 @@
 import { useEffect, useRef } from 'react';
-import TOCContext from '../context/TOCContext';
+import { TOCContainer } from '../context/TOCContext';
+import ParentChildContext from '../context/ParentChildContext';
 
 /**
  * Adds Element to TOC List and manages viewport intersection events
  * @param element Element to include in TOC
  * @param id Unique identifier for the element, also used for in-page navigation
  */
-function useTOCHeader(sectionObj: Section): void {
-  const { determineActiveSection, addSection } = TOCContext.useContainer();
-  const { element, id, text, parent } = sectionObj;
+function useTOCEntry(sectionObj: Omit<Section, 'parent'>): void {
+  const {
+    determineActiveSection,
+    addSection,
+    activeSection,
+  } = TOCContainer.useContainer();
+  const {
+    parent,
+    addChild,
+    isParentOrChild,
+  } = ParentChildContext.useContainer();
+  const { element, id, text } = sectionObj;
 
   const observer = useRef<IntersectionObserver>();
   const intersected = useRef<boolean>(false);
@@ -77,7 +87,8 @@ function useTOCHeader(sectionObj: Section): void {
     if (!element) return;
 
     addSection({ element, id, text, parent });
+    addChild(id);
   }, []);
 }
 
-export default useTOCHeader;
+export default useTOCEntry;
