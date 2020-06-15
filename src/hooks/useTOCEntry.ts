@@ -7,17 +7,9 @@ import ParentChildContext from '../context/ParentChildContext';
  * @param element Element to include in TOC
  * @param id Unique identifier for the element, also used for in-page navigation
  */
-function useTOCEntry(sectionObj: Omit<Section, 'parent'>): void {
-  const {
-    determineActiveSection,
-    addSection,
-    activeSection,
-  } = TOCContainer.useContainer();
-  const {
-    parent,
-    addChild,
-    isParentOrChild,
-  } = ParentChildContext.useContainer();
+function useTOCEntry(sectionObj: Omit<Section, 'parents'>): void {
+  const { determineActiveSection, addSection } = TOCContainer.useContainer();
+  const { parents, addChild } = ParentChildContext.useContainer();
   const { element, id, text } = sectionObj;
 
   const observer = useRef<IntersectionObserver>();
@@ -86,7 +78,7 @@ function useTOCEntry(sectionObj: Omit<Section, 'parent'>): void {
   useEffect(() => {
     if (!element) return;
 
-    addSection({ element, id, text, parent });
+    addSection({ element, id, text, parents });
     addChild(id);
   }, []);
 }

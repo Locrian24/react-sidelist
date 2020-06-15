@@ -4,7 +4,7 @@ type Section = {
   element: React.RefObject<HTMLElement> | null;
   text: string;
   id: string;
-  parent: string;
+  parents: string[];
 };
 
 type SectionList = {

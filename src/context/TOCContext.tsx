@@ -5,7 +5,6 @@ import TOCChildrenWrapper from '../components/TOCChildren';
 
 function useTOC(initialState = null) {
   const [sectionList, setSectionList] = useState<SectionList>({});
-  const [parentList, setParentList] = useState<Array<string>>([]);
   const [activeSection, setActiveSection] = useState<string | null>(
     initialState
   );
@@ -68,44 +67,23 @@ function useTOC(initialState = null) {
    * Adds the section to the state array
    * @param element Element ref to be added
    */
-  const addSection = ({ element, id, text, parent }: Section) => {
+  const addSection = ({ element, id, text, parents }: Section) => {
     if (!element) return;
 
     // TODO Don't support dynamically added sections in thier correct position
     // ? List order comes from order of adding to state list rather than actual order
     setSectionList((prev: SectionList) => ({
       ...prev,
-      [id]: { element, id, text, parent },
+      [id]: { element, id, text, parents },
     }));
   };
 
   /**
    * Returns the nested level of a parent/activeSection
    */
-  const getDepth = () => {
-    return activeParents.length - 2;
+  const getDepth = (id: string) => {
+    return sectionList[id].parents.length - 1;
   };
-
-  /**
-   * Aggregate all ancestors of a node
-   * @param primaryParent the id of the deepest parent
-   */
-  const aggregateParents = useCallback(
-    (
-      primaryParent: string,
-      currentParents = [] as Array<string>
-    ): Array<string> => {
-      if (!sectionList[primaryParent]?.parent) return [primaryParent];
-
-      const { parent } = sectionList[primaryParent];
-
-      return [
-        primaryParent,
-        ...aggregateParents(parent, [...currentParents, primaryParent]),
-      ];
-    },
-    [sectionList]
-  );
 
   return {
     determineActiveSection,
@@ -114,7 +92,7 @@ function useTOC(initialState = null) {
     activeSection,
     activeParents,
     setActiveParents,
-    aggregateParents,
+    getDepth,
   };
 }
 

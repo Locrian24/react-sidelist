@@ -1,38 +1,39 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { TOCContainer } from '../context/TOCContext';
+import useTOC, { ExtendedSection } from '../hooks/useTOC';
 
 // TODO: Remove styled component from library
-const ListElement = styled.div<{ isActive: boolean; showChild: boolean }>`
+const ListElement = styled.div<{
+  isActive: boolean;
+  showChild: boolean;
+  depth: number;
+}>`
   color: ${({ isActive }) => (isActive ? 'red' : 'black')};
   ${({ showChild }) => !showChild && `display: none;`}
+  ${({ depth }) =>
+    depth &&
+    `
+    padding-left: ${15 * depth}px;
+  `}
 `;
 
 const TOC: React.FC = () => {
-  const {
-    activeSection,
-    sectionList,
-    activeParents,
-  } = TOCContainer.useContainer();
-  if (sectionList.length === 0) return <div>Loading...</div>;
+  const { sections, isSectionActive } = useTOC();
 
-  console.log('activeParents', activeParents);
+  if (sections.length === 0) return <div>Loading...</div>;
 
   return (
     <div>
-      {Object.keys(sectionList).map((key: string) => {
-        const section = sectionList[key];
-
-        return (
-          <ListElement
-            key={sectionList[key].id}
-            isActive={activeSection === section.id}
-            showChild={activeParents.includes(section.parent)}
-          >
-            {section?.text}
-          </ListElement>
-        );
-      })}
+      {sections.map((section: ExtendedSection) => (
+        <ListElement
+          key={section.id}
+          isActive={isSectionActive(section)}
+          showChild={section.show}
+          depth={section.depth}
+        >
+          {section.text}
+        </ListElement>
+      ))}
     </div>
   );
 };

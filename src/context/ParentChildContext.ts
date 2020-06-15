@@ -1,36 +1,22 @@
-import { RefObject, useState, useEffect } from 'react';
+import { useState } from 'react';
 import { createContainer } from 'unstated-next';
 
-type Child = {
-  id: string;
-  ref: RefObject<HTMLElement>;
-  // isRoot: boolean; // Flag for recursive expansion
-};
-
-type Active = {
-  active: boolean;
-  id: string;
-};
-
-function useParentChild(initialState = 'root') {
-  const [parent] = useState<string>(initialState);
+function useParentChild(initialState = ['root']) {
+  const parents = initialState;
   const [children, setChildren] = useState<Array<string>>([]);
-  const [expand, setExpand] = useState<boolean>(false);
 
   const addChild = (child: string) => {
     setChildren((prev) => [...(prev || []), child]);
   };
 
-  const isParentOrChild = (id: string) => {
-    setExpand([parent, ...children].includes(id));
-  };
+  const isParentOrChild = (id: string) =>
+    [...parents, ...children].includes(id);
 
   return {
     children,
     addChild,
-    parent,
+    parents,
     isParentOrChild,
-    expand,
   };
 }
 

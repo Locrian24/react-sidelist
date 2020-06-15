@@ -3,24 +3,15 @@ import ParentChildContext from '../context/ParentChildContext';
 import { TOCContainer } from '../context/TOCContext';
 
 function useTOCChildren() {
-  const { parent, isParentOrChild, expand } = ParentChildContext.useContainer();
-  const {
-    activeSection,
-    aggregateParents,
-    setActiveParents,
-  } = TOCContainer.useContainer();
-
-  // TODO: Check if parent is a child in it's own context -> nested parent
-  useEffect(() => {
-    isParentOrChild(activeSection);
-  }, [activeSection, isParentOrChild]);
+  const { parents, isParentOrChild } = ParentChildContext.useContainer();
+  const { activeSection, setActiveParents } = TOCContainer.useContainer();
 
   useEffect(() => {
+    const expand = isParentOrChild(activeSection);
     if (expand) {
-      const activeParents = aggregateParents(activeSection);
-      setActiveParents(activeParents);
+      setActiveParents([...parents, activeSection]);
     }
-  }, [expand, activeSection, setActiveParents, aggregateParents]);
+  }, [activeSection, isParentOrChild, parents, setActiveParents]);
 }
 
 export default useTOCChildren;

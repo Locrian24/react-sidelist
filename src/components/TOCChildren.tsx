@@ -14,8 +14,14 @@ const TOCChildren: FC<PropsWithChildren<{}>> = ({ children }) => {
 };
 
 const TOCChildrenWrapper: FC<TOCChildrenProps> = ({ parent, children }) => {
+  let allParents = [parent];
+  if (parent !== 'root') {
+    const { parents } = ParentChildContext.useContainer();
+    allParents = [...allParents, ...parents];
+  }
+
   return (
-    <ParentChildContext.Provider initialState={parent}>
+    <ParentChildContext.Provider initialState={allParents}>
       <TOCChildren>{children}</TOCChildren>
     </ParentChildContext.Provider>
   );
