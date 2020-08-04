@@ -1,8 +1,5 @@
 import React from 'react';
-import TOCEntry from '../components/TOCEntry';
-import { TOCProvider } from '../context/TOCContext';
-import TOC from '../components/TOC';
-import TOCChildren from '../components/TOCChildren';
+import { TOCProvider, TOC, TOCEntry, TOCChildren } from '../src';
 
 export default { title: 'TOC' };
 

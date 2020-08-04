@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
     "outDir": "dist",
-    "module": "ES2015",
-    "target": "es5",
+    "module": "ESNext",
+    "target": "ESNext",
     "jsx": "react",
     "declaration": true,
     "declarationMap": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "esModuleInterop": true

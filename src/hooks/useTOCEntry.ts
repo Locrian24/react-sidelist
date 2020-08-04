@@ -2,21 +2,31 @@ import { useEffect, useRef } from 'react';
 import { TOCContainer } from '../context/TOCContext';
 import ParentChildContext from '../context/ParentChildContext';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {};
+
 /**
- * Adds Element to TOC List and manages viewport intersection events
- * @param element Element to include in TOC
- * @param id Unique identifier for the element, also used for in-page navigation
+ * Hook to initialise and modify a Table of Contents Section
+ * @param element Ref of HTMLElement to be considered a ref in Table of COntents
+ * @param sectionObj Object of necessary information for the table of contents
+ * @param callback (optional) Callback for when the section is considered "active"
  */
-function useTOCEntry(sectionObj: Omit<Section, 'parents'>): void {
+function useTOCEntry(
+  element: React.RefObject<HTMLElement> | null,
+  sectionObj: Pick<Section, 'id' | 'text'>,
+  callback: Function = noop
+) {
   const { determineActiveSection, addSection } = TOCContainer.useContainer();
   const { parents, addChild } = ParentChildContext.useContainer();
-  const { element, id, text } = sectionObj;
+  const { id, text } = sectionObj;
 
   const observer = useRef<IntersectionObserver>();
   const intersected = useRef<boolean>(false);
 
-  const callback = () => {
-    determineActiveSection(element, id);
+  const callbacks = () => {
+    // eslint-disable-next-line no-unused-expressions
+    element && determineActiveSection(element, id);
+    callback();
   };
 
   const startObserver = () => {
@@ -40,17 +50,17 @@ function useTOCEntry(sectionObj: Omit<Section, 'parents'>): void {
         ? isIntersecting
         : intersectionRatio > 0;
 
-    // enterring viewport
+    // entering viewport
     if (!intersected.current && isInViewport) {
       intersected.current = true;
-      window.addEventListener('scroll', callback);
+      window.addEventListener('scroll', callbacks);
       return;
     }
 
     // leaving viewport
     if (intersected.current && !isInViewport) {
       intersected.current = false;
-      window.removeEventListener('scroll', callback);
+      window.removeEventListener('scroll', callbacks);
 
       // ?: Remove as activeSection?
     }
@@ -70,7 +80,7 @@ function useTOCEntry(sectionObj: Omit<Section, 'parents'>): void {
     startObserver();
 
     return () => {
-      window.removeEventListener('scroll', callback);
+      window.removeEventListener('scroll', callbacks);
       stopObserver();
     };
   }, []);

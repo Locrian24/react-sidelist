@@ -10,11 +10,12 @@ interface TOCChildrenProps {
 const TOCChildren: FC<PropsWithChildren<{}>> = ({ children }) => {
   useTOCChildren();
 
-  return <>{children}</>;
+  return <div>{children}</div>;
 };
 
 const TOCChildrenWrapper: FC<TOCChildrenProps> = ({ parent, children }) => {
   let allParents = [parent];
+
   if (parent !== 'root') {
     const { parents } = ParentChildContext.useContainer();
     allParents = [...allParents, ...parents];

@@ -19,9 +19,9 @@ const TOCEntry: React.FC<PropsWithChildren<TOCEntryProps>> = ({
   children,
 }) => {
   const element = useRef<HTMLDivElement>(null);
-  const section = { id, text, element };
+  const section = { id, text };
 
-  useTOCEntry(section);
+  useTOCEntry(element, section);
 
   return <div ref={element}>{children}</div>;
 };

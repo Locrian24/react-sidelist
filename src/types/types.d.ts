@@ -5,6 +5,7 @@ type Section = {
   text: string;
   id: string;
   parents: string[];
+  index: number;
 };
 
 type SectionList = {
@@ -22,3 +23,8 @@ type Root = {
   id: string;
   expand: () => void;
 };
+
+interface ProviderProps {
+  initialSection: string | undefined;
+  range?: { min: number; max: number };
+}

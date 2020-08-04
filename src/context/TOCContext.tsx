@@ -1,12 +1,13 @@
-import React, { useState, PropsWithChildren, useCallback } from 'react';
+import React, { useState, PropsWithChildren } from 'react';
+// TODO: Switch everything to native context api
 import { createContainer } from 'unstated-next';
-import { Target } from '../types/contextTypes';
 import TOCChildrenWrapper from '../components/TOCChildren';
 
-function useTOC(initialState = null) {
+function useTOCContext(initialState: ProviderProps | undefined) {
+  const { initialSection, range } = initialState || {};
   const [sectionList, setSectionList] = useState<SectionList>({});
-  const [activeSection, setActiveSection] = useState<string | null>(
-    initialState
+  const [activeSection, setActiveSection] = useState<string>(
+    initialSection || ''
   );
   const [activeParents, setActiveParents] = useState<Array<string>>([]);
 
@@ -29,8 +30,7 @@ function useTOC(initialState = null) {
    * @returns If the element meets the criteria that will define it as "active"
    */
   function isActive(element: Target): boolean {
-    // TODO: Change to user defined value
-    const { min, max } = { min: 0, max: 80 };
+    const { min, max } = range || { min: 0, max: 80 };
 
     const topPos = getYScrollPosition(element);
     const bottomPosition = topPos + 150;
@@ -60,21 +60,26 @@ function useTOC(initialState = null) {
     if (!active) return;
 
     // TODO: What happens when multiple elements are "active"
-    setActiveSection((prev: string | null) => (prev !== id ? id : prev));
+    setActiveSection((prev: string | undefined) => (prev !== id ? id : prev));
   };
 
   /**
    * Adds the section to the state array
    * @param element Element ref to be added
    */
-  const addSection = ({ element, id, text, parents }: Section) => {
+  const addSection = ({
+    element,
+    id,
+    text,
+    parents,
+  }: Omit<Section, 'index'>) => {
     if (!element) return;
 
     // TODO Don't support dynamically added sections in thier correct position
     // ? List order comes from order of adding to state list rather than actual order
     setSectionList((prev: SectionList) => ({
       ...prev,
-      [id]: { element, id, text, parents },
+      [id]: { element, id, text, parents, index: Object.keys(prev).length },
     }));
   };
 
@@ -96,14 +101,18 @@ function useTOC(initialState = null) {
   };
 }
 
-export const TOCContainer = createContainer(useTOC);
+export const TOCContainer = createContainer<
+  ReturnType<typeof useTOCContext>,
+  ProviderProps
+>(useTOCContext);
 
 export const TOCProvider = ({
   initialSection,
+  range,
   children,
-}: PropsWithChildren<{ initialSection: string }>) => {
+}: PropsWithChildren<ProviderProps>) => {
   return (
-    <TOCContainer.Provider initialState={initialSection}>
+    <TOCContainer.Provider initialState={{ initialSection, range }}>
       <TOCChildrenWrapper parent="root">{children}</TOCChildrenWrapper>
     </TOCContainer.Provider>
   );

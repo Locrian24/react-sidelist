@@ -8,6 +8,7 @@ function useTOCChildren() {
 
   useEffect(() => {
     const expand = isParentOrChild(activeSection);
+
     if (expand) {
       setActiveParents([...parents, activeSection]);
     }

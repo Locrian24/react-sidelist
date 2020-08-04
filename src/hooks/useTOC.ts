@@ -13,10 +13,18 @@ function useTOC() {
     sectionList,
     activeParents,
     getDepth,
+  }: {
+    [key: string]: any;
+    sectionList: SectionList;
   } = TOCContainer.useContainer();
 
   const isSectionActive = (section: ExtendedSection) =>
     activeSection === section.id;
+
+  const activeSectionIndex = useMemo(
+    () => sectionList[activeSection]?.index ?? -1,
+    [sectionList, activeSection]
+  );
 
   const sections = useMemo(() => {
     return Object.keys(sectionList).reduce(
@@ -34,7 +42,13 @@ function useTOC() {
     );
   }, [sectionList, activeParents, getDepth]);
 
-  return { sections, isSectionActive };
+  return {
+    sections,
+    sectionList,
+    isSectionActive,
+    activeSection,
+    activeSectionIndex,
+  };
 }
 
 export default useTOC;
